@@ -11,7 +11,6 @@ namespace text_rpg
       Console.WriteLine("Elk Elchson Productions presents: The Awesome Text RPG.");
       string player = SetupPlayer();
       string className = SetupClass(player);
-      Console.WriteLine("You are a " + className + "!");
       Console.WriteLine("Game ends.");
     }
 
@@ -26,18 +25,37 @@ namespace text_rpg
     static string SetupClass(string player)
     {
       Console.WriteLine(player + ", choose your class!");
-      string[] classNames = { "Mage", "Rogue" };
-      Console.WriteLine("[0] " + classNames[0]);
-      Console.WriteLine("[1] " + classNames[1]);
-      string value = Console.ReadLine();
-      if (value == "0" || value == classNames[0])
+      string[] classNames = { "Mage", "Paladin", "Warrior" };
+      string selectedClass = "";
+      // Loop über das 'classNames' Array, i entspricht dem Index des jeweiligen Eintrags
+      // (0, 1, 2, ...)
+      for (int i = 0; i < classNames.Length; i++)
       {
-        return classNames[0];
+        Console.WriteLine("[" + i + "] " + classNames[i]);
+      }
+      string value = Console.ReadLine();
+      // Prüfen, ob sich 'value' in eine Zahl (int) konvertieren lässt
+      if (int.TryParse(value, out int valueAsInt))
+      {
+        // Value ist eine Zahl
+        if (valueAsInt > 0 && valueAsInt < classNames.Length)
+        {
+          // User hat eine gültige Zahl eingenehmen
+          selectedClass = classNames[valueAsInt];
+          Console.WriteLine("You are a " + selectedClass + "!");
+        }
+        else
+        {
+          // User hat eine ungültige Zahl eingegeben
+          Console.WriteLine("Please enter a number between 0 and " + classNames.Length + "!");
+        }
       }
       else
       {
-        return classNames[1];
+        // Value ist keine Zahl
+        Console.WriteLine("Please enter a number.");
       }
+      return selectedClass;
     }
   }
 }
