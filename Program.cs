@@ -11,6 +11,14 @@ namespace text_rpg
       Console.WriteLine("Elk Elchson Productions presents: The Awesome Text RPG.");
       string player = SetupPlayer();
       string className = SetupClass(player);
+      Console.WriteLine("Where would you want to go?");
+      string[] locations = { "Forest", "Mountains", "Castle" };
+      for (int i = 0; i < locations.Length; i++)
+      {
+        Console.WriteLine("[" + i + "] " + locations[i]);
+      }
+      int number = AskForUserInput(0, locations.Length - 1);
+      Console.WriteLine("You are heading to the " + locations[number]);
       Console.WriteLine("Game ends.");
     }
 
@@ -33,29 +41,30 @@ namespace text_rpg
       {
         Console.WriteLine("[" + i + "] " + classNames[i]);
       }
-      string value = Console.ReadLine();
-      // Prüfen, ob sich 'value' in eine Zahl (int) konvertieren lässt
-      if (int.TryParse(value, out int valueAsInt))
-      {
-        // Value ist eine Zahl
-        if (valueAsInt > 0 && valueAsInt < classNames.Length)
-        {
-          // User hat eine gültige Zahl eingenehmen
-          selectedClass = classNames[valueAsInt];
-          Console.WriteLine("You are a " + selectedClass + "!");
-        }
-        else
-        {
-          // User hat eine ungültige Zahl eingegeben
-          Console.WriteLine("Please enter a number between 0 and " + classNames.Length + "!");
-        }
-      }
-      else
-      {
-        // Value ist keine Zahl
-        Console.WriteLine("Please enter a number.");
-      }
+      int number = AskForUserInput(0, classNames.Length - 1);
+      selectedClass = classNames[number];
+      Console.WriteLine("You are a " + selectedClass + "!");
       return selectedClass;
+    }
+
+    static int AskForUserInput(int minimum, int maximum)
+    {
+      string text = Console.ReadLine();
+      int number = 0;
+      try
+      {
+        number = int.Parse(text);
+        if (number < minimum || number > maximum)
+        {
+          throw new IndexOutOfRangeException();
+        }
+      }
+      catch (Exception)
+      {
+        Console.WriteLine("Please enter a valid number between " + minimum + " and " + maximum + "!");
+        return AskForUserInput(minimum, maximum);
+      }
+      return number;
     }
   }
 }
